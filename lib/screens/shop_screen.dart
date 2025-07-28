@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shop_app/models/item.dart';
+import 'package:shop_app/providers/cart_notifier.dart';
 import 'package:shop_app/providers/item_provider.dart';
 import 'package:shop_app/screens/cart_screen.dart';
 
@@ -14,7 +16,12 @@ class _ShopScreenState extends ConsumerState<ShopScreen> {
   @override
   Widget build(BuildContext context) {
     final allItems = ref.watch(allItemProvider);
-    final cartItems = ref.watch(cartItemProvider);
+    final isInCart = ref.watch(cartNotifierProvider).toList();
+    final cartItems = ref.watch(cartNotifierProvider);
+    bool itemInCart(Item item) {
+      return cartItems.any((cartItem) => cartItem.id == item.id);
+    }
+
 
     return Scaffold(
       appBar: AppBar(
@@ -34,7 +41,7 @@ class _ShopScreenState extends ConsumerState<ShopScreen> {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
                   child: Text(
-                    '${cartItems.length} Cart Items',
+                    '${isInCart.length} Cart Items',
                     style: TextStyle(
                       fontSize: 18,
                       color: Colors.redAccent,
@@ -58,12 +65,12 @@ class _ShopScreenState extends ConsumerState<ShopScreen> {
             crossAxisCount: 2,
             mainAxisSpacing: 20,
             crossAxisSpacing: 16,
-            childAspectRatio: 1,
+            childAspectRatio: 0.85,
           ),
           itemBuilder: (context, index) {
             return Container(
               padding: EdgeInsets.all(8),
-              color: Colors.blueGrey.withAlpha(10),
+              color: Colors.blueGrey.withAlpha(20),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
@@ -77,6 +84,10 @@ class _ShopScreenState extends ConsumerState<ShopScreen> {
                     Text(allItems[index].name),
                     Spacer(),
                     Text('${allItems[index].price} IQD'),
+                    Spacer(),
+                    cartItems.any((i) => i.id == allItems[index].id)
+                      ? TextButton(onPressed: () {}, child: const Text('Remove'))
+                      : TextButton(onPressed: () {}, child: const Text('Add to Cart'))
                   ],
                 ),
               ),
