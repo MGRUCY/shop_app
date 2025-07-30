@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shop_app/models/item.dart';
 
-List<Item> allItems = [
+List<Item> allItems = const [
   Item(
       id: '1',
       name: 'Groovy Shorts',

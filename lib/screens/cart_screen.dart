@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shop_app/providers/cart_notifier.dart';
-import 'package:shop_app/providers/item_provider.dart';
 
 class CartScreen extends ConsumerStatefulWidget {
   const CartScreen({super.key});
@@ -23,6 +22,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
       body: ListView.builder(
         itemCount: cartItems.length,
         itemBuilder: (context, index) {
+          final item = cartItems.elementAt(index);
           return Padding(
             padding: const EdgeInsets.all(8),
             child: Container(
@@ -33,14 +33,14 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0,0,12,0),
                     child: Image.asset(
-                      allItems[index].image,
+                      item.image,
                       width: 40,
                       height: 40,
                     ),
                   ),
-                  Text(allItems[index].name),
+                  Text(item.name),
                   Spacer(),
-                  Text('${allItems[index].price} IQD'),
+                  Text('${item.price} IQD'),
                 ],
               ),
             ),

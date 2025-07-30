@@ -16,11 +16,9 @@ class _ShopScreenState extends ConsumerState<ShopScreen> {
   @override
   Widget build(BuildContext context) {
     final allItems = ref.watch(allItemProvider);
-    final isInCart = ref.watch(cartNotifierProvider).toList();
+    final isInCart = ref.watch(cartNotifierProvider);
     final selectedItems = ref.watch(selectedItemsProvider);
     final isSelecting = selectedItems.isNotEmpty;
-    final cartnotifier = ref.read(cartNotifierProvider.notifier);
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('W Shop'),
@@ -67,8 +65,8 @@ class _ShopScreenState extends ConsumerState<ShopScreen> {
             ),
             itemBuilder: (context, index) {
               final item = allItems[index];
+              final selectedItems = ref.watch(selectedItemsProvider);
               final isSelected = selectedItems.contains(item);
-
               return GestureDetector(
                 onLongPress: () {
                   ref.read(selectedItemsProvider.notifier).toggle(item);
@@ -108,8 +106,11 @@ class _ShopScreenState extends ConsumerState<ShopScreen> {
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
               child: ElevatedButton(
                 onPressed: () {
+                  final selectedItems = ref.read(selectedItemsProvider);
+                  final cartNotifier = ref.read(cartNotifierProvider.notifier);
                   for (final item in selectedItems) {
-                    cartnotifier.addItem(item);
+
+                    cartNotifier.addItem(item);
                   }
                   ref.read(selectedItemsProvider.notifier).clear();
                 },
